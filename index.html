@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Pattern Field — a behavioral observation interface. Record intentional actions as binary signals over time." />
+  <title>Pattern Field — Field View</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <div class="app-wrapper">
+
+    <!-- ── Header ── -->
+    <header class="site-header" role="banner">
+      <div class="site-title">
+        <h1>Pattern Field</h1>
+        <span class="subtitle">behavioral observation system</span>
+      </div>
+      <nav class="site-nav" role="navigation" aria-label="Primary navigation">
+        <a href="index.html" class="nav-link active" aria-current="page">Field</a>
+        <a href="analytics.html" class="nav-link">Analysis</a>
+      </nav>
+    </header>
+
+    <!-- ── Main ── -->
+    <main id="main-content" role="main">
+
+      <!-- ── Today's Date Context ── -->
+      <section class="section" aria-labelledby="context-heading">
+        <div class="section-header">
+          <h2 id="context-heading">Current Entry</h2>
+          <span class="section-meta" id="today-date" aria-live="polite">—</span>
+        </div>
+
+        <p>
+          Mark each behavior as <code>1</code> if an intentional action was performed today.
+          Leave unmarked for <code>0</code>. Missing days default to <code>0</code>.
+        </p>
+
+        <!-- Legend -->
+        <div class="system-key" style="margin-top: 20px;" aria-label="Legend">
+          <span class="key-item">
+            <span class="key-dot is-1" aria-hidden="true"></span>
+            <span class="key-label">1 — intentional</span>
+          </span>
+          <span class="key-item">
+            <span class="key-dot is-0" aria-hidden="true"></span>
+            <span class="key-label">0 — none</span>
+          </span>
+          <span class="key-item">
+            <span class="key-dot is-miss" aria-hidden="true"></span>
+            <span class="key-label">— missing</span>
+          </span>
+        </div>
+      </section>
+
+      <!-- ── Behavior Field ── -->
+      <section class="section" aria-labelledby="field-heading">
+        <div class="section-header">
+          <h2 id="field-heading">Observed Behaviors</h2>
+          <span class="section-meta" id="field-window-label">last 30 days</span>
+        </div>
+
+        <!-- Date strip (labels above dots) -->
+        <div class="date-strip" role="presentation" aria-hidden="true">
+          <span></span>
+          <div class="date-labels" id="date-labels"></div>
+          <span></span>
+        </div>
+
+        <ol class="behavior-list" id="behavior-list" aria-label="Behavior observation grid">
+        </ol>
+
+        <!-- Add new behavior -->
+        <div class="add-behavior" role="form" aria-label="Add new behavior">
+          <input type="text" id="new-behavior-input" class="field-input" placeholder="behavior name"
+            aria-label="New behavior name" maxlength="48" />
+          <button type="button" id="add-behavior-btn" class="btn" aria-label="Add behavior">
+            + add
+          </button>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ── Footer ── -->
+    <footer class="site-footer" role="contentinfo">
+      <span class="footer-note">pattern field</span>
+      <span class="footer-note" id="entry-count" aria-live="polite">0 behaviors tracked</span>
+    </footer>
+
+  </div>
+
+  <script src="script.js" defer></script>
+</body>
+
+</html>

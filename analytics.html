@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+        content="Pattern Field — Analysis View. Examine behavioral frequency, streaks, and distribution across observed time." />
+    <title>Pattern Field — Analysis View</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <div class="app-wrapper">
+
+        <!-- ── Header ── -->
+        <header class="site-header" role="banner">
+            <div class="site-title">
+                <h1>Pattern Field</h1>
+                <span class="subtitle">behavioral observation system</span>
+            </div>
+            <nav class="site-nav" role="navigation" aria-label="Primary navigation">
+                <a href="index.html" class="nav-link">Field</a>
+                <a href="analytics.html" class="nav-link active" aria-current="page">Analysis</a>
+            </nav>
+        </header>
+
+        <!-- ── Main ── -->
+        <main id="main-content" role="main">
+
+            <!-- ── System Overview ── -->
+            <section class="section" aria-labelledby="overview-heading">
+                <div class="section-header">
+                    <h2 id="overview-heading">System Overview</h2>
+                    <span class="section-meta" id="analysis-date-range" aria-live="polite">—</span>
+                </div>
+
+                <!-- Top-level stat cards -->
+                <div class="stat-grid" role="list" aria-label="System statistics">
+
+                    <article class="stat-card" role="listitem" aria-label="Behaviors tracked">
+                        <span class="stat-label">Behaviors</span>
+                        <span class="stat-value" id="stat-behaviors" aria-live="polite">—</span>
+                        <span class="stat-sub">tracked</span>
+                    </article>
+
+                    <article class="stat-card" role="listitem" aria-label="Observation period">
+                        <span class="stat-label">Observation</span>
+                        <span class="stat-value" id="stat-days" aria-live="polite">—</span>
+                        <span class="stat-sub">days total</span>
+                    </article>
+
+                    <article class="stat-card" role="listitem" aria-label="Total signal count">
+                        <span class="stat-label">Total 1s</span>
+                        <span class="stat-value" id="stat-total-ones" aria-live="polite">—</span>
+                        <span class="stat-sub">intentional signals</span>
+                    </article>
+
+                    <article class="stat-card" role="listitem" aria-label="Overall density">
+                        <span class="stat-label">Density</span>
+                        <span class="stat-value" id="stat-density" aria-live="polite">—</span>
+                        <span class="stat-sub">across all fields</span>
+                    </article>
+
+                </div>
+            </section>
+
+            <hr class="divider" />
+
+            <!-- ── Behavior Analysis ── -->
+            <section class="section" aria-labelledby="behavior-analysis-heading">
+                <div class="section-header">
+                    <h2 id="behavior-analysis-heading">Per-Behavior Analysis</h2>
+                    <span class="section-meta">sorted by frequency</span>
+                </div>
+
+                <div id="behavior-analysis-list" aria-label="Individual behavior analysis">
+                </div>
+            </section>
+
+            <hr class="divider" />
+
+            <!-- ── Observation Note ── -->
+            <section class="section" aria-labelledby="note-heading">
+                <div class="section-header">
+                    <h2 id="note-heading">On the Data</h2>
+                </div>
+                <p>
+                    This interface records intentional actions as binary signals.
+                    A <code>1</code> indicates an action was performed with intent.
+                    A <code>0</code> indicates it was not.
+                    Missing entries are treated as <code>0</code> for frequency calculations
+                    but are distinguished visually as unrecorded observations.
+                </p>
+                <p style="margin-top: 12px;">
+                    No value judgment is embedded in this system.
+                    Patterns are observed, not evaluated.
+                </p>
+                <p id="observation-sentence" style="margin-top: 20px;" aria-live="polite"></p>
+            </section>
+
+        </main>
+
+        <!-- ── Footer ── -->
+        <footer class="site-footer" role="contentinfo">
+            <span class="footer-note">pattern field</span>
+            <span class="footer-note" id="analysis-last-updated" aria-live="polite">—</span>
+        </footer>
+
+    </div>
+
+    <script src="script.js" defer></script>
+</body>
+
+</html>
