@@ -87,10 +87,15 @@
 
     </main>
 
-    <!-- ── Footer ── -->
     <footer class="site-footer" role="contentinfo">
       <span class="footer-note">pattern field</span>
       <span class="footer-note" id="entry-count" aria-live="polite">0 behaviors tracked</span>
+      <button type="button" id="export-btn" class="footer-note"
+        style="background:none;border:none;cursor:pointer;padding:0;" aria-label="Export data as JSON">export</button>
+      <button type="button" id="import-btn" class="footer-note"
+        style="background:none;border:none;cursor:pointer;padding:0;" aria-label="Import data from JSON">import</button>
+      <input type="file" id="import-file-input" accept=".json,application/json" style="display:none;"
+        aria-hidden="true" />
     </footer>
 
   </div>

@@ -193,6 +193,22 @@ function registerAction(id) {
    renderPatterns();
 }
 
+/**
+ * deletePattern(id)
+ * Removes the pattern with the given id from the in-memory array,
+ * persists the change, and re-renders both views.
+ *
+ * @param {string} id
+ */
+function deletePattern(id) {
+   const index = patterns.findIndex(p => p.id === id);
+   if (index === -1) return;
+   patterns.splice(index, 1);
+   saveData(patterns);
+   renderPatterns();
+   renderAnalytics();
+}
+
 /* ── Pattern Creation ── */
 
 /**
@@ -282,11 +298,20 @@ function buildPatternRow(pattern, dates) {
    ratio.className = 'row-stat';
    ratio.textContent = Math.round(recurrenceRatio(pattern) * 100) + '%';
 
+   // Delete button
+   const delBtn = document.createElement('button');
+   delBtn.type = 'button';
+   delBtn.className = 'btn-delete';
+   delBtn.textContent = '×';
+   delBtn.setAttribute('aria-label', `Delete ${pattern.name}`);
+   delBtn.addEventListener('click', () => deletePattern(pattern.id));
+
    li.appendChild(label);
    li.appendChild(grid);
    li.appendChild(btn);
    li.appendChild(stat);
    li.appendChild(ratio);
+   li.appendChild(delBtn);
 
    return li;
 }
@@ -542,6 +567,92 @@ function renderBehaviorDetails() {
    });
 }
 
+/* ── Export ── */
+
+/**
+ * exportData()
+ * Serialises the current patterns array and triggers a download
+ * of pattern-field-backup.json via a temporary object URL.
+ */
+function exportData() {
+   const json = JSON.stringify(patterns, null, 2);
+   const blob = new Blob([json], { type: 'application/json' });
+   const url = URL.createObjectURL(blob);
+
+   const a = document.createElement('a');
+   a.href = url;
+   a.download = 'pattern-field-backup.json';
+   a.click();
+
+   // Release the object URL after the download is triggered
+   URL.revokeObjectURL(url);
+}
+
+/**
+ * initExport()
+ * Wires the export button in the footer.
+ */
+function initExport() {
+   const btn = document.getElementById('export-btn');
+   if (!btn) return;
+   btn.addEventListener('click', exportData);
+}
+
+/* ── Import ── */
+
+/**
+ * importData(file)
+ * Reads a JSON backup file, validates it as an array, replaces the
+ * in-memory patterns, persists to localStorage, and re-renders.
+ *
+ * @param {File} file
+ */
+function importData(file) {
+   const reader = new FileReader();
+
+   reader.onload = function (e) {
+      try {
+         const parsed = JSON.parse(e.target.result);
+
+         if (!Array.isArray(parsed)) {
+            console.error('Pattern Field import: expected an array, got', typeof parsed);
+            return;
+         }
+
+         patterns = parsed;
+         saveData(patterns);
+         renderPatterns();
+         renderAnalytics();
+      } catch (err) {
+         console.error('Pattern Field import: invalid JSON —', err.message);
+      }
+   };
+
+   reader.readAsText(file);
+}
+
+/**
+ * initImport()
+ * Wires the import button to open a hidden file picker,
+ * then passes the selected file to importData().
+ */
+function initImport() {
+   const btn = document.getElementById('import-btn');
+   const input = document.getElementById('import-file-input');
+   if (!btn || !input) return;
+
+   btn.addEventListener('click', () => {
+      input.value = '';        // reset so re-selecting the same file still fires change
+      input.click();
+   });
+
+   input.addEventListener('change', () => {
+      if (input.files && input.files[0]) {
+         importData(input.files[0]);
+      }
+   });
+}
+
 /* ── In-memory state ── */
 let patterns = loadData();
 
@@ -549,5 +660,7 @@ let patterns = loadData();
 document.addEventListener('DOMContentLoaded', () => {
    renderPatterns();
    initAddBehavior();
+   initExport();
+   initImport();
    renderAnalytics();
 });
