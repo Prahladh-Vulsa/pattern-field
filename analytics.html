@@ -6,7 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description"
         content="Pattern Field — Analysis View. Examine behavioral frequency, streaks, and distribution across observed time." />
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'none';" />
     <title>Pattern Field — Analysis View</title>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" />
     <link rel="stylesheet" href="style.css" />
 </head>
 
@@ -97,7 +101,7 @@
                     No value judgment is embedded in this system.
                     Patterns are observed, not evaluated.
                 </p>
-                <p id="observation-sentence" style="margin-top: 20px;" aria-live="polite"></p>
+                <p id="observation-sentence" class="observation-note" aria-live="polite"></p>
             </section>
 
         </main>

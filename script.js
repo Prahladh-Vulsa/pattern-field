@@ -27,7 +27,7 @@ function loadData() {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return [];
       const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) ? parsed : [];
+      return Array.isArray(parsed) ? parsed.filter(isValidPattern) : [];
    } catch {
       return [];
    }
@@ -35,6 +35,28 @@ function loadData() {
 
 function saveData(data) {
    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+/**
+ * isValidPattern(p)
+ * Returns true if p conforms to the expected pattern schema.
+ * Used to validate both localStorage reads and JSON imports.
+ */
+function isValidPattern(p) {
+   return (
+      p !== null &&
+      typeof p === 'object' &&
+      typeof p.id === 'string' && p.id.trim().length > 0 &&
+      typeof p.name === 'string' && p.name.trim().length > 0 && p.name.length <= 100 &&
+      Array.isArray(p.observations) &&
+      p.observations.every(o =>
+         o !== null &&
+         typeof o === 'object' &&
+         typeof o.date === 'string' &&
+         /^\d{4}-\d{2}-\d{2}$/.test(o.date) &&
+         (o.value === 0 || o.value === 1)
+      )
+   );
 }
 
 /* ── Utilities ── */
@@ -101,7 +123,7 @@ function currentRun(pattern) {
    let run = 0;
    const base = new Date();
 
-   for (let i = 0; ; i++) {
+   for (let i = 0; i < 3650; i++) {   // cap at 10-year lookback
       const d = new Date(base);
       d.setDate(base.getDate() - i);
       const y = d.getFullYear();
@@ -209,6 +231,25 @@ function deletePattern(id) {
    renderAnalytics();
 }
 
+/**
+ * renamePattern(id, newName)
+ * Updates the name of the pattern with the given id, persists the change,
+ * and re-renders both views.
+ *
+ * @param {string} id
+ * @param {string} newName
+ */
+function renamePattern(id, newName) {
+   const trimmed = newName.trim();
+   if (!trimmed) return;
+   const pattern = patterns.find(p => p.id === id);
+   if (!pattern) return;
+   pattern.name = trimmed;
+   saveData(patterns);
+   renderPatterns();
+   renderAnalytics();
+}
+
 /* ── Pattern Creation ── */
 
 /**
@@ -220,6 +261,10 @@ function deletePattern(id) {
  * @returns {object} the new pattern
  */
 function createPattern(name) {
+   const trimmed = name.trim();
+   if (patterns.some(p => p.name.toLowerCase() === trimmed.toLowerCase())) {
+      return null;
+   }
    const pattern = {
       id: generateId(),
       name: name.trim(),
@@ -264,12 +309,14 @@ function buildPatternRow(pattern, dates) {
    grid.setAttribute('role', 'img');
    grid.setAttribute('aria-label', `${WINDOW_DAYS}-day grid for ${pattern.name}`);
 
+   const todayStr = todayISO();
    for (const date of dates) {
       const dot = document.createElement('span');
       dot.className = 'dot';
       dot.dataset.value = (date in obsMap)
          ? (obsMap[date] === 1 ? '1' : '0')
          : 'missing';
+      if (date === todayStr) dot.classList.add('dot-today');
       grid.appendChild(dot);
    }
 
@@ -298,6 +345,18 @@ function buildPatternRow(pattern, dates) {
    ratio.className = 'row-stat';
    ratio.textContent = Math.round(recurrenceRatio(pattern) * 100) + '%';
 
+   // Edit button
+   const editBtn = document.createElement('button');
+   editBtn.type = 'button';
+   editBtn.className = 'btn-edit';
+   editBtn.textContent = 'edit';
+   editBtn.setAttribute('aria-label', `Rename ${pattern.name}`);
+   editBtn.addEventListener('click', () => {
+      const newName = prompt('Rename behavior:', pattern.name);
+      if (newName === null) return;
+      renamePattern(pattern.id, newName);
+   });
+
    // Delete button
    const delBtn = document.createElement('button');
    delBtn.type = 'button';
@@ -311,6 +370,7 @@ function buildPatternRow(pattern, dates) {
    li.appendChild(btn);
    li.appendChild(stat);
    li.appendChild(ratio);
+   li.appendChild(editBtn);
    li.appendChild(delBtn);
 
    return li;
@@ -619,7 +679,18 @@ function importData(file) {
             return;
          }
 
-         patterns = parsed;
+         const valid = parsed.filter(isValidPattern);
+         if (valid.length !== parsed.length) {
+            console.warn(
+               `Pattern Field import: ${parsed.length - valid.length} item(s) failed schema validation and were skipped.`
+            );
+         }
+         if (valid.length === 0) {
+            console.error('Pattern Field import: no valid patterns found in file.');
+            return;
+         }
+
+         patterns = valid;
          saveData(patterns);
          renderPatterns();
          renderAnalytics();

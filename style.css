@@ -199,7 +199,7 @@ main {
 
 .behavior-row {
     display: grid;
-    grid-template-columns: 160px 1fr auto auto auto auto;
+    grid-template-columns: 160px 1fr auto auto auto auto auto;
     align-items: center;
     gap: var(--space-md);
     padding: var(--space-sm) var(--space-md);
@@ -271,6 +271,34 @@ main {
     pointer-events: auto;
 }
 
+/* ── Edit Button (per-row) ── */
+.btn-edit {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 3px var(--space-sm);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color var(--transition), border-color var(--transition);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.behavior-row:hover .btn-edit {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.btn-edit:hover {
+    color: var(--text-secondary);
+    border-color: var(--border);
+}
+
 .btn-delete:hover {
     color: var(--text-secondary);
     border-color: var(--border);
@@ -312,6 +340,10 @@ main {
 
 .dot[data-value="missing"] {
     background: var(--dot-miss);
+}
+
+.dot-today {
+    outline: 1px solid var(--text-accent);
 }
 
 /* ── Row Stat ── */
@@ -571,6 +603,26 @@ main {
     letter-spacing: 0.08em;
 }
 
+/* ── Utility Classes ── */
+.legend {
+    margin-top: 20px;
+}
+
+.btn-footer {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.visually-hidden {
+    display: none;
+}
+
+.observation-note {
+    margin-top: 20px;
+}
+
 /* ── Scrollbar ── */
 ::-webkit-scrollbar {
     width: 4px;
@@ -584,6 +636,3 @@ main {
     background: var(--border);
     border-radius: 2px;
 }
-
-/* ── Google Fonts Import ── */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap');

@@ -6,7 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description"
     content="Pattern Field — a behavioral observation interface. Record intentional actions as binary signals over time." />
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'none';" />
   <title>Pattern Field — Field View</title>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" />
   <link rel="stylesheet" href="style.css" />
 </head>
 
@@ -42,7 +46,7 @@
         </p>
 
         <!-- Legend -->
-        <div class="system-key" style="margin-top: 20px;" aria-label="Legend">
+        <div class="system-key legend" aria-label="Legend">
           <span class="key-item">
             <span class="key-dot is-1" aria-hidden="true"></span>
             <span class="key-label">1 — intentional</span>
@@ -90,11 +94,11 @@
     <footer class="site-footer" role="contentinfo">
       <span class="footer-note">pattern field</span>
       <span class="footer-note" id="entry-count" aria-live="polite">0 behaviors tracked</span>
-      <button type="button" id="export-btn" class="footer-note"
-        style="background:none;border:none;cursor:pointer;padding:0;" aria-label="Export data as JSON">export</button>
-      <button type="button" id="import-btn" class="footer-note"
-        style="background:none;border:none;cursor:pointer;padding:0;" aria-label="Import data from JSON">import</button>
-      <input type="file" id="import-file-input" accept=".json,application/json" style="display:none;"
+      <button type="button" id="export-btn" class="footer-note btn-footer"
+        aria-label="Export data as JSON">export</button>
+      <button type="button" id="import-btn" class="footer-note btn-footer"
+        aria-label="Import data from JSON">import</button>
+      <input type="file" id="import-file-input" accept=".json,application/json" class="visually-hidden"
         aria-hidden="true" />
     </footer>
 
